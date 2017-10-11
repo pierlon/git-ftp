@@ -621,8 +621,8 @@ set_changed_files() {
 	else
 		list_changed_files
 	fi
-	add_include_files
 	filter_ignore_files "$TMP_GITFTP_UPLOAD" "$TMP_GITFTP_DELETE"
+	add_include_files
 	if [ -s "$TMP_GITFTP_UPLOAD" ] || [ -s "$TMP_GITFTP_DELETE" ]; then
 		write_log "Having files to sync.";
 	else
