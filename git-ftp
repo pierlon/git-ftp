@@ -491,6 +491,14 @@ pre_push_hook() {
 	fi
 }
 
+pre_upload_hook() {
+	hook='.git/hooks/pre-upload-push'
+	if [ "$EXECUTE_HOOKS" -eq 1 -a -e "$hook" ]; then
+		write_log "Trigger pre-upload-push hook with: "$REMOTE_HOST" $TMP_CURL_UPLOAD_FILE"
+		$hook "$REMOTE_HOST" "$TMP_CURL_UPLOAD_FILE" || exit "$ERROR_HOOK"
+	fi
+}
+
 post_push_hook() {
 	hook='.git/hooks/post-ftp-push'
 	if [ -e "$hook" ]; then
@@ -750,6 +758,7 @@ handle_file_sync() {
 			upload_file_buffered "$FILE_NAME"
 		fi
 	done < "$TMP_GITFTP_UPLOAD"
+	pre_upload_hook
 	fire_upload_buffer
 
 	while IFS= read -r -d '' FILE_NAME; do
